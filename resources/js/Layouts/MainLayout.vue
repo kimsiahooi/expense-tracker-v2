@@ -2,9 +2,5 @@
   <main>
     <slot />
   </main>
-  <Toaster />
+  <Toast />
 </template>
-
-<script setup lang="ts">
-import Toaster from '@/components/ui/toast/Toaster.vue'
-</script>

@@ -200,7 +200,6 @@ import { reactive } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { useToast } from '@/components/ui/toast/use-toast'
 import { Loader2, Pencil, Trash2 } from 'lucide-vue-next'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog'
@@ -216,8 +215,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { useToast } from 'primevue/usetoast'
 
-const { toast } = useToast()
+const toast = useToast()
 
 defineProps({
   transactions: Array,
@@ -257,10 +257,11 @@ const submitCreateHandler = () => {
       if (message) {
         dialogForm.createModalIsOpen = false
 
-        toast({
-          title: message.title,
-          description: message.description,
-          variant: message.variant || 'default',
+        toast.add({
+          severity: message.variant || 'info',
+          summary: message.title,
+          detail: message.description,
+          life: 3000,
         })
       }
     },
@@ -285,10 +286,11 @@ const submitEditHandler = () => {
       if (message) {
         dialogForm.editModalIsOpen = false
 
-        toast({
-          title: message.title,
-          description: message.description,
-          variant: message.variant || 'default',
+        toast.add({
+          severity: message.variant || 'info',
+          summary: message.title,
+          detail: message.description,
+          life: 3000,
         })
       }
     },
@@ -310,10 +312,11 @@ const submitDeleteHandler = () => {
       if (message) {
         dialogForm.deleteModalIsOpen = false
 
-        toast({
-          title: message.title,
-          description: message.description,
-          variant: message.variant || 'default',
+        toast.add({
+          severity: message.variant || 'info',
+          summary: message.title,
+          detail: message.description,
+          life: 3000,
         })
       }
     },
