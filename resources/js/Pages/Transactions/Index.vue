@@ -316,7 +316,7 @@ const submitDeleteHandler = () => {
           severity: message.variant || 'info',
           summary: message.title,
           detail: message.description,
-          // life: 3000,
+          life: 3000,
         })
       }
     },
