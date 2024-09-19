@@ -248,7 +248,7 @@ const createHandler = () => {
 }
 
 const submitCreateHandler = () => {
-  createForm.post('/transactions', {
+  createForm.post(route('transactions.store'), {
     onSuccess: ({
       props: {
         flash: { message },
@@ -277,7 +277,7 @@ const editHandler = (transaction) => {
 }
 
 const submitEditHandler = () => {
-  editForm.put(`/transactions/${dialogForm.currentEditId}`, {
+  editForm.put(route('transactions.update', dialogForm.currentEditId), {
     onSuccess: ({
       props: {
         flash: { message },
@@ -303,7 +303,7 @@ const deleteHandler = (transaction) => {
 }
 
 const submitDeleteHandler = () => {
-  router.delete(`/transactions/${dialogForm.currentDeleteId}`, {
+  router.delete(route('transactions.destroy', dialogForm.currentDeleteId), {
     onSuccess: ({
       props: {
         flash: { message },
