@@ -195,7 +195,7 @@
   </AlertDialog>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { reactive } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -316,7 +316,7 @@ const submitDeleteHandler = () => {
           severity: message.variant || 'info',
           summary: message.title,
           detail: message.description,
-          life: 3000,
+          // life: 3000,
         })
       }
     },
