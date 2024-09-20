@@ -32,7 +32,7 @@ class TransactionController extends Controller
     {
         Transaction::create(
             $request->validate([
-                'name' => 'required',
+                'name' => 'required|string',
                 'amount' => 'required|numeric|min:0.01',
                 'transaction_at' => 'required|date'
             ])
