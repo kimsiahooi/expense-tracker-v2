@@ -11,11 +11,14 @@ module.exports = {
     container: {
       center: true,
       padding: '1rem',
+    },
+    fontFamily: {
+      sans: ['Libre Baskerville', 'serif'],
+    },
+    extend: {
       screens: {
         '2xl': '1400px',
       },
-    },
-    extend: {
       colors: {
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

@@ -1,10 +1,10 @@
 <template>
-  <section class="min-h-screen py-5 flex flex-col justify-center items-center">
+  <section class="flex-1 flex flex-col items-center justify-center">
     <div class="container mx-auto">
       <div class="max-w-96 mx-auto">
         <Card>
           <CardHeader>
-            <CardTitle>Login</CardTitle>
+            <CardTitle>Sign In</CardTitle>
           </CardHeader>
           <CardContent>
             <form @submit.prevent="loginHandler">
@@ -32,14 +32,19 @@
                   <p v-if="form.errors.password" class="text-destructive">{{ form.errors.password }}</p>
                 </div>
               </div>
-              <Button type="submit" :disabled="form.processing">
+              <Button type="submit" :disabled="form.processing" class="w-full">
                 <Loader2
                   class="w-4 h-4 mr-2 animate-spin"
                   :class="{
                     hidden: !form.processing,
                   }" />
-                Submit
+                Sign In
               </Button>
+              <div class="mt-5">
+                <p class="text-sm text-slate-600">
+                  No Account yet? <Link :href="route('sign_up')" class="underline">Sign Up</Link>
+                </p>
+              </div>
             </form>
           </CardContent>
         </Card>
@@ -54,6 +59,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-vue-next'
 import { useForm } from '@inertiajs/vue3'
+import { Link } from '@inertiajs/vue3'
 
 import { useToast } from 'primevue/usetoast'
 

@@ -1,7 +1,7 @@
 <template>
-  <section class="min-h-screen py-5">
+  <section>
     <div class="container mx-auto">
-      <div class="text-end mb-5">
+      <div v-if="page.props.user" class="text-end mb-5">
         <Button @click="createHandler"> Create </Button>
       </div>
       <Card>
@@ -13,20 +13,18 @@
             <TableCaption>A list of your recent transactions.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead>ID</TableHead>
                 <TableHead>Name</TableHead>
                 <TableHead>Amount</TableHead>
                 <TableHead>Transaction At</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead v-if="page.props.user">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               <TableRow v-for="transaction in transactions" :key="transaction.id">
-                <TableCell class="w-max">{{ transaction.id }}</TableCell>
                 <TableCell class="w-max">{{ transaction.name }}</TableCell>
                 <TableCell class="w-max">RM{{ transaction.amount }}</TableCell>
                 <TableCell class="w-max">{{ format(transaction.transaction_at, 'MMMM dd, yyyy') }}</TableCell>
-                <TableCell class="w-max">
+                <TableCell v-if="page.props.user" class="w-max">
                   <TooltipProvider>
                     <div class="space-x-5">
                       <Tooltip>
@@ -216,12 +214,15 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
 import { useToast } from 'primevue/usetoast'
+import { usePage } from '@inertiajs/vue3'
 
 const toast = useToast()
 
 defineProps({
   transactions: Array,
 })
+
+const page = usePage()
 
 const createForm = useForm({
   name: '',

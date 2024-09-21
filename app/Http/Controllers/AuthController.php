@@ -27,7 +27,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->intended();
+        return redirect()->intended('transactions');
     }
 
     public function create()
@@ -37,24 +37,26 @@ class AuthController extends Controller
 
     public function store(Request $request)
     {
-        $user = $request->validate([
+        $fields = $request->validate([
             'name' => 'required|string',
             'email' => 'required|email|unique:users',
             'password' => 'required|string|confirmed|min:3'
         ]);
 
-        User::create($user);
+        $user = User::create($fields);
 
-        if (!Auth::attempt($user, true)) {
-            throw ValidationException::withMessages([
-                'email' => 'Email or password is incorrect. Please try again.'
-            ]);
-        }
+        Auth::login($user);
 
-        $request->session()->regenerate();
-
-        return redirect()->intended();
+        return redirect()->intended('transactions');
     }
 
-    public function destroy() {}
+    public function destroy(Request $request)
+    {
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('sign_in');
+    }
 }

@@ -10,10 +10,10 @@ class TransactionController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         return inertia('Transactions/Index', [
-            'transactions' => Transaction::orderBy('id', 'desc')->get()
+            'transactions' => $request->user()->transactions()->orderBy('id', 'desc')->get()
         ]);
     }
 
@@ -30,15 +30,13 @@ class TransactionController extends Controller
      */
     public function store(Request $request)
     {
-        Transaction::create(
-            $request->validate([
-                'name' => 'required|string',
-                'amount' => 'required|numeric|min:0.01',
-                'transaction_at' => 'required|date'
-            ])
-        );
+        $request->user()->transactions()->create($request->validate([
+            'name' => 'required|string',
+            'amount' => 'required|numeric|min:0.01',
+            'transaction_at' => 'required|date'
+        ]));
 
-        return redirect()->back()->with('message', [
+        return back()->with('message', [
             'title' => 'Succeed!',
             'description' => 'Transaction is created!',
             'variant' => 'success'
@@ -74,7 +72,7 @@ class TransactionController extends Controller
             ])
         );
 
-        return redirect()->back()->with('message', [
+        return back()->with('message', [
             'title' => 'Edited!',
             'description' => 'Transaction is edited!',
             'variant' => 'success'
@@ -88,7 +86,7 @@ class TransactionController extends Controller
     {
         $transaction->delete();
 
-        return redirect()->back()->with('message', [
+        return back()->with('message', [
             'title' => 'Deleted!',
             'description' => 'Transaction is deleted!',
             'variant' => 'success'
