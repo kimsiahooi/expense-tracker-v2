@@ -4,53 +4,61 @@
       <div v-if="page.props.user" class="text-end mb-5">
         <Button @click="createHandler"> Create </Button>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle>Transaction List</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <Table class="min-w-max">
-            <TableCaption>A list of your recent transactions.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead>Amount</TableHead>
-                <TableHead>Transaction At</TableHead>
-                <TableHead v-if="page.props.user">Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              <TableRow v-for="transaction in transactions" :key="transaction.id">
-                <TableCell class="w-max">{{ transaction.name }}</TableCell>
-                <TableCell class="w-max">RM{{ transaction.amount }}</TableCell>
-                <TableCell class="w-max">{{ format(transaction.transaction_at, 'MMMM dd, yyyy') }}</TableCell>
-                <TableCell v-if="page.props.user" class="w-max">
-                  <TooltipProvider>
-                    <div class="space-x-5">
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Pencil class="w-4 h-4" @click="editHandler(transaction)" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Edit</p>
-                        </TooltipContent>
-                      </Tooltip>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <Trash2 class="w-4 h-4 text-destructive" @click="deleteHandler(transaction)" />
-                        </TooltipTrigger>
-                        <TooltipContent>
-                          <p>Delete</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>
-                  </TooltipProvider>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <div class="space-y-5">
+        <Card>
+          <CardHeader>
+            <CardTitle>Transaction List</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Table class="min-w-max">
+              <TableCaption>A list of your recent transactions.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Name</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Transaction At</TableHead>
+                  <TableHead v-if="page.props.user">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                <TableRow v-for="transaction in transactions" :key="transaction.id">
+                  <TableCell class="w-max">{{ transaction.name }}</TableCell>
+                  <TableCell class="w-max">RM{{ transaction.amount }}</TableCell>
+                  <TableCell class="w-max">{{ format(transaction.transaction_at, 'MMMM dd, yyyy') }}</TableCell>
+                  <TableCell v-if="page.props.user" class="w-max">
+                    <TooltipProvider>
+                      <div class="space-x-5">
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Pencil class="w-4 h-4" @click="editHandler(transaction)" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Edit</p>
+                          </TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <Trash2 class="w-4 h-4 text-destructive" @click="deleteHandler(transaction)" />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Delete</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </TooltipProvider>
+                  </TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Total</CardTitle>
+          </CardHeader>
+          <CardContent>RM{{ formatter.format(computedTotal ?? 0) }}</CardContent>
+        </Card>
+      </div>
     </div>
   </section>
   <Dialog v-model:open="dialogForm.createModalIsOpen">
@@ -194,7 +202,7 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed } from 'vue'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
@@ -218,8 +226,12 @@ import { usePage } from '@inertiajs/vue3'
 
 const toast = useToast()
 
-defineProps({
+const { transactions } = defineProps({
   transactions: Array,
+})
+
+const computedTotal = computed(() => {
+  return transactions.reduce((total, current) => total + +current.amount, 0)
 })
 
 const page = usePage()
@@ -243,6 +255,8 @@ const dialogForm = reactive({
   editModalIsOpen: false,
   deleteModalIsOpen: false,
 })
+
+const formatter = new Intl.NumberFormat('en-US', { minimumFractionDigits: 2 })
 
 const createHandler = () => {
   dialogForm.createModalIsOpen = true
