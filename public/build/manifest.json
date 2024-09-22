@@ -1,0 +1,33 @@
+{
+  "node_modules/@fontsource/libre-baskerville/files/libre-baskerville-latin-400-normal.woff": {
+    "file": "assets/libre-baskerville-latin-400-normal-DY5EiaPJ.woff",
+    "src": "node_modules/@fontsource/libre-baskerville/files/libre-baskerville-latin-400-normal.woff"
+  },
+  "node_modules/@fontsource/libre-baskerville/files/libre-baskerville-latin-400-normal.woff2": {
+    "file": "assets/libre-baskerville-latin-400-normal-jJI4ANT2.woff2",
+    "src": "node_modules/@fontsource/libre-baskerville/files/libre-baskerville-latin-400-normal.woff2"
+  },
+  "node_modules/@fontsource/libre-baskerville/files/libre-baskerville-latin-ext-400-normal.woff": {
+    "file": "assets/libre-baskerville-latin-ext-400-normal-DUVX6EAV.woff",
+    "src": "node_modules/@fontsource/libre-baskerville/files/libre-baskerville-latin-ext-400-normal.woff"
+  },
+  "node_modules/@fontsource/libre-baskerville/files/libre-baskerville-latin-ext-400-normal.woff2": {
+    "file": "assets/libre-baskerville-latin-ext-400-normal-BQxDBgAe.woff2",
+    "src": "node_modules/@fontsource/libre-baskerville/files/libre-baskerville-latin-ext-400-normal.woff2"
+  },
+  "resources/js/app.js": {
+    "file": "assets/app-Ctu_dQ28.js",
+    "name": "app",
+    "src": "resources/js/app.js",
+    "isEntry": true,
+    "css": [
+      "assets/app-CLz3mn_Z.css"
+    ],
+    "assets": [
+      "assets/libre-baskerville-latin-ext-400-normal-BQxDBgAe.woff2",
+      "assets/libre-baskerville-latin-ext-400-normal-DUVX6EAV.woff",
+      "assets/libre-baskerville-latin-400-normal-jJI4ANT2.woff2",
+      "assets/libre-baskerville-latin-400-normal-DY5EiaPJ.woff"
+    ]
+  }
+}
