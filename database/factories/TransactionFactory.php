@@ -18,6 +18,7 @@ class TransactionFactory extends Factory
     {
         return [
             'name' => fake()->sentence(),
+            'currency' => 'MYR',
             'amount' => fake()->numberBetween(1, 199),
             'transaction_at' => fake()->dateTime()
         ];

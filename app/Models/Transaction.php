@@ -10,7 +10,7 @@ class Transaction extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'amount', 'transaction_at'];
+    protected $fillable = ['name', 'currency', 'amount', 'transaction_at'];
 
     public function owner(): BelongsTo
     {

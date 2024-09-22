@@ -23,7 +23,7 @@
               <TableBody>
                 <TableRow v-for="transaction in transactions" :key="transaction.id">
                   <TableCell class="w-max">{{ transaction.name }}</TableCell>
-                  <TableCell class="w-max">RM{{ transaction.amount }}</TableCell>
+                  <TableCell class="w-max">{{ transaction.currency }} {{ transaction.amount }}</TableCell>
                   <TableCell class="w-max">{{ format(transaction.transaction_at, 'MMMM dd, yyyy') }}</TableCell>
                   <TableCell v-if="page.props.user" class="w-max">
                     <TooltipProvider>
@@ -56,7 +56,8 @@
           <CardHeader>
             <CardTitle>Total</CardTitle>
           </CardHeader>
-          <CardContent>RM{{ formatter.format(computedTotal ?? 0) }}</CardContent>
+          <CardContent>MYR {{ formatter.format(computedMyrTotal ?? 0) }}</CardContent>
+          <CardContent>SGD {{ formatter.format(computedSgdTotal ?? 0) }}</CardContent>
         </Card>
       </div>
     </div>
@@ -80,19 +81,38 @@
                   v-model="createForm.name" />
                 <p v-if="createForm.errors.name" class="text-destructive">{{ createForm.errors.name }}</p>
               </div>
-              <div>
-                <label class="mb-2 block text-black" for="name">Amount</label>
-                <Input
-                  class="text-black"
-                  :class="{
-                    'border-destructive': createForm.errors.amount,
-                  }"
-                  type="number"
-                  v-model.number="createForm.amount"
-                  step="0.01" />
-                <p v-if="createForm.errors.amount" class="text-destructive">
-                  {{ createForm.errors.amount }}
-                </p>
+              <div class="flex gap-3">
+                <div class="w-28">
+                  <label class="mb-2 block text-black" for="currency">Currency</label>
+                  <Select defaultValue="MYR" v-model="createForm.currency">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select currency" class="text-black" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="MYR">MYR</SelectItem>
+                        <SelectItem value="SGD">SGD</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <p v-if="createForm.errors.currency" class="text-destructive">
+                    {{ createForm.errors.currency }}
+                  </p>
+                </div>
+                <div class="flex-1">
+                  <label class="mb-2 block text-black" for="name">Amount</label>
+                  <Input
+                    class="text-black"
+                    :class="{
+                      'border-destructive': createForm.errors.amount,
+                    }"
+                    type="number"
+                    v-model.number="createForm.amount"
+                    step="0.01" />
+                  <p v-if="createForm.errors.amount" class="text-destructive">
+                    {{ createForm.errors.amount }}
+                  </p>
+                </div>
               </div>
               <div>
                 <label class="mb-2 block text-black" for="transaction_at">Transaction Date</label>
@@ -142,19 +162,38 @@
                   v-model="editForm.name" />
                 <p v-if="editForm.errors.name" class="text-destructive">{{ editForm.errors.name }}</p>
               </div>
-              <div>
-                <label class="mb-2 block text-black" for="name">Amount</label>
-                <Input
-                  class="text-black"
-                  :class="{
-                    'border-destructive': editForm.errors.amount,
-                  }"
-                  type="number"
-                  v-model.number="editForm.amount"
-                  step="0.01" />
-                <p v-if="editForm.errors.amount" class="text-destructive">
-                  {{ editForm.errors.amount }}
-                </p>
+              <div class="flex gap-3">
+                <div class="w-28">
+                  <label class="mb-2 block text-black" for="currency">Currency</label>
+                  <Select defaultValue="MYR" v-model="editForm.currency">
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select currency" class="text-black" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        <SelectItem value="MYR">MYR</SelectItem>
+                        <SelectItem value="SGD">SGD</SelectItem>
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  <p v-if="editForm.errors.currency" class="text-destructive">
+                    {{ editForm.errors.currency }}
+                  </p>
+                </div>
+                <div class="flex-1">
+                  <label class="mb-2 block text-black" for="name">Amount</label>
+                  <Input
+                    class="text-black"
+                    :class="{
+                      'border-destructive': editForm.errors.amount,
+                    }"
+                    type="number"
+                    v-model.number="editForm.amount"
+                    step="0.01" />
+                  <p v-if="editForm.errors.amount" class="text-destructive">
+                    {{ editForm.errors.amount }}
+                  </p>
+                </div>
               </div>
               <div>
                 <label class="mb-2 block text-black" for="transaction_at">Transaction Date</label>
@@ -221,6 +260,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { useToast } from 'primevue/usetoast'
 import { usePage } from '@inertiajs/vue3'
 
@@ -230,20 +270,30 @@ const { transactions } = defineProps({
   transactions: Array,
 })
 
-const computedTotal = computed(() => {
-  return transactions.reduce((total, current) => total + +current.amount, 0)
+const computedMyrTotal = computed(() => {
+  return transactions
+    .filter((transaction) => transaction.currency === 'MYR')
+    .reduce((total, current) => total + +current.amount, 0)
+})
+
+const computedSgdTotal = computed(() => {
+  return transactions
+    .filter((transaction) => transaction.currency === 'SGD')
+    .reduce((total, current) => total + +current.amount, 0)
 })
 
 const page = usePage()
 
 const createForm = useForm({
   name: '',
+  currency: transactions.length ? transactions[0].currency : 'MYR',
   amount: 0,
   transaction_at: format(new Date(), 'yyyy-MM-dd'),
 })
 
 const editForm = useForm({
   name: '',
+  currency: transactions.length ? transactions[0].currency : 'MYR',
   amount: 0,
   transaction_at: format(new Date(), 'yyyy-MM-dd'),
 })
@@ -285,6 +335,7 @@ const submitCreateHandler = () => {
 
 const editHandler = (transaction) => {
   editForm.name = transaction.name
+  editForm.currency = transaction.currency
   editForm.amount = transaction.amount
   editForm.transaction_at = format(transaction.transaction_at, 'yyyy-MM-dd')
   dialogForm.currentEditId = transaction.id

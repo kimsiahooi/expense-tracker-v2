@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('transactions', function (Blueprint $table) {
-            $table->tinyText('name');
+            $table->text('name');
+            $table->tinyText('currency');
             $table->decimal('amount');
             $table->dateTime('transaction_at');
         });
@@ -25,6 +26,7 @@ return new class extends Migration
     {
         Schema::dropColumns('transactions', [
             'name',
+            'currency',
             'amount',
             'transaction_at'
         ]);

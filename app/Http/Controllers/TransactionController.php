@@ -32,6 +32,7 @@ class TransactionController extends Controller
     {
         $request->user()->transactions()->create($request->validate([
             'name' => 'required|string',
+            'currency' => 'required|min:3|max:3|uppercase',
             'amount' => 'required|numeric|min:0.01',
             'transaction_at' => 'required|date'
         ]));
@@ -67,6 +68,7 @@ class TransactionController extends Controller
         $transaction->update(
             $request->validate([
                 'name' => 'required',
+                'currency' => 'required|min:3|max:3|uppercase',
                 'amount' => 'required|numeric|min:0.01',
                 'transaction_at' => 'required|date'
             ])
